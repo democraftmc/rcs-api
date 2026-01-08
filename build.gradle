@@ -1,28 +1,18 @@
 plugins {
     id 'java-library'
-    id 'com.gradleup.shadow' version '9.0.0-beta4'
     id 'maven-publish'
 }
 
-group = 'fr.democraft.rcs.api'
+group = 'fr.democraft.rcs'
 version = project.findProperty('module_version') ?: '0.1.0'
 
 repositories {
     mavenCentral()
-    maven { url = "https://maven.mrnavastar.me/snapshots/" }
     maven { url = "https://maven.mrnavastar.me/releases/" }
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-    maven { url = "https://repo.papermc.io/repository/maven-public/" }
-    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compileOnly          'group.aelysium.rustyconnector:core:0.9.1'
-    compileOnly          'net.kyori:adventure-api:4.17.0'
-    compileOnly          'org.spigotmc:spigot-api:1.21-R0.1-SNAPSHOT'
-    compileOnly          'com.velocitypowered:velocity-api:3.4.0-SNAPSHOT'
-    annotationProcessor  'com.velocitypowered:velocity-api:3.4.0-SNAPSHOT'
+    compileOnly 'group.aelysium.rustyconnector:core:0.9.1'
 }
 
 java {
@@ -32,51 +22,11 @@ java {
     withSourcesJar()
 }
 
-tasks.named('compileJava') {
-    options.encoding = 'UTF-8'
-}
-
-javadoc {
-    options.encoding = 'UTF-8'
-}
-
-shadowJar {
-    archiveBaseName.set(project.findProperty('archives_base_name')?.toString() ?: 'rcs-api')
-    archiveClassifier.set('')
-    mergeServiceFiles()
-    relocate 'org.reflections', 'group.aelysium.rustyconnector.shaded.org.reflections'
-}
-
-// Disable the plain jar and use the shadow jar as the primary artifact
-tasks.named('jar').configure {
-    enabled = false
-    finalizedBy 'shadowJar'
-}
-
-// Prefer configureEach to avoid eager configuration
-tasks.withType(JavaCompile).configureEach {
-    options.compilerArgs += ['-Xdoclint:none']
-}
-
-tasks.withType(Javadoc).configureEach {
-    options.addStringOption('Xdoclint:none', '-quiet')
-}
-
 publishing {
     publications {
-        create('maven', MavenPublication) {
-            // Publish the shadow jar as the main artifact (the plain 'jar' task is disabled)
-            artifact(tasks.named('shadowJar')) {
-                builtBy tasks.named('shadowJar')
-            }
-
-            // Also publish sources and javadoc jars when available
-            artifact(tasks.named('sourcesJar')) {
-                builtBy tasks.named('sourcesJar')
-            }
-            artifact(tasks.named('javadocJar')) {
-                builtBy tasks.named('javadocJar')
-            }
+        maven(MavenPublication) {
+            from components.java
+            artifactId = 'rcs-api'
         }
     }
 }
