@@ -65,7 +65,18 @@ tasks.withType(Javadoc).configureEach {
 publishing {
     publications {
         create('maven', MavenPublication) {
-            from components.java
+            // Publish the shadow jar as the main artifact (the plain 'jar' task is disabled)
+            artifact(tasks.named('shadowJar')) {
+                builtBy tasks.named('shadowJar')
+            }
+
+            // Also publish sources and javadoc jars when available
+            artifact(tasks.named('sourcesJar')) {
+                builtBy tasks.named('sourcesJar')
+            }
+            artifact(tasks.named('javadocJar')) {
+                builtBy tasks.named('javadocJar')
+            }
         }
     }
 }

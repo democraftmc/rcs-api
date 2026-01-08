@@ -1,6 +1,6 @@
 {
   "main": "fr.democraft.rcm.smart.ApiProvider$Builder",
-  "name": "Smart API",
+  "name": "Smart-API",
   "description": "Cloudsystem but inside rusty.",
   "environments": [
     "proxy"
