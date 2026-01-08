@@ -1,19 +1,11 @@
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath 'com.gradleup.shadow:shadow-gradle-plugin:9.0.0-beta4'
-    }
+plugins {
+    id 'java-library'
+    id 'com.gradleup.shadow' version '9.0.0-beta4'
+    id 'maven-publish'
 }
 
-apply plugin: 'java'
-apply plugin: 'java-library'
-apply plugin: 'com.gradleup.shadow'
-apply plugin: 'maven-publish'
-
-group = 'fr.democraft.rcm.smart'
-version = module_version
+group = 'fr.democraft.rcs'
+version = project.findProperty('module_version') ?: '0.1.0'
 
 repositories {
     mavenCentral()
@@ -22,6 +14,7 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = "https://repo.papermc.io/repository/maven-public/" }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -39,8 +32,8 @@ java {
     withSourcesJar()
 }
 
-compileJava {
-    options.encoding = "UTF-8"
+tasks.named('compileJava') {
+    options.encoding = 'UTF-8'
 }
 
 javadoc {
@@ -48,27 +41,30 @@ javadoc {
 }
 
 shadowJar {
-    archiveBaseName.set(archives_base_name)
+    archiveBaseName.set(project.findProperty('archives_base_name')?.toString() ?: 'rcs-api')
     archiveClassifier.set('')
     mergeServiceFiles()
     relocate 'org.reflections', 'group.aelysium.rustyconnector.shaded.org.reflections'
 }
 
+// Disable the plain jar and use the shadow jar as the primary artifact
 tasks.named('jar').configure {
     enabled = false
+    finalizedBy 'shadowJar'
 }
-tasks.withType(JavaCompile) {
+
+// Prefer configureEach to avoid eager configuration
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-Xdoclint:none']
 }
-tasks.withType(Javadoc) {
+
+tasks.withType(Javadoc).configureEach {
     options.addStringOption('Xdoclint:none', '-quiet')
 }
 
-jar.finalizedBy(shadowJar)
-
 publishing {
     publications {
-        maven(MavenPublication) {
+        create('maven', MavenPublication) {
             from components.java
         }
     }
