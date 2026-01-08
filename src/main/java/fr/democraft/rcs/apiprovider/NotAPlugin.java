@@ -1,4 +1,4 @@
-package fr.democraft.rcs;
+package fr.democraft.rcs.apiprovider;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -1,4 +1,4 @@
-package fr.democraft.rcs;
+package fr.democraft.rcs.apiprovider;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.plugin.Plugin;

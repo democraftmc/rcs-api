@@ -3,5 +3,5 @@ version: '${version}'
 description: Smart RustyConnector Module
 author: Funasitien
 website: https://smart.democraft.fr
-main: fr.democraft.rcs.NotAPlugin
+main: fr.democraft.rcs.apiprovider.NotAPlugin
 api-version: '1.21'

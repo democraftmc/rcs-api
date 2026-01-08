@@ -1,4 +1,4 @@
-package fr.democraft.rcs;
+package fr.democraft.rcs.apiprovider;
 import group.aelysium.rustyconnector.common.modules.ExternalModuleBuilder;
 import group.aelysium.rustyconnector.common.modules.Module;
 import group.aelysium.rustyconnector.proxy.ProxyKernel;

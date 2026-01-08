@@ -1,4 +1,4 @@
-package fr.democraft.rcs;
+package fr.democraft.rcs.apiprovider;
 
 
 public class ClassicLogger {
