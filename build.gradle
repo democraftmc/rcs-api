@@ -10,10 +10,12 @@ version = project.findProperty('module_version') ?: '0.1.0'
 repositories {
     mavenCentral()
     maven { url = "https://maven.mrnavastar.me/releases/" }
+    maven { url = "https://repo.papermc.io/repository/maven-public/" }
 }
 
 dependencies {
-    compileOnly 'group.aelysium.rustyconnector:core:0.9.1'
+    compileOnly  'net.kyori:adventure-api:4.17.0'
+    compileOnly  'group.aelysium.rustyconnector:core:0.9.1'
 }
 
 java {
